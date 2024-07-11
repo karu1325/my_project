@@ -49,6 +49,13 @@ class LoginController extends Controller
     }
     public function unregister(Request $request)
     {
-        return view("login/unregister", []);
+        //sessionに保存したidの値をnullに変更する
+        $request->session()->flush();
+        return response("ログアウトが完了しました。<a href='/login'>前のページへ戻る</a>");
+    }
+
+    public function sign_up(Request $request)
+    {
+        
     }
 }

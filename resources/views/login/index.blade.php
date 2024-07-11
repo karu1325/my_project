@@ -10,18 +10,22 @@
 </head>
 
 <body>
-    <h2>新規登録</h2>
-    <form method="post" action="/login/register">
-        @csrf
-        <div>
-            ID : <input type="text" name="id">
-        </div>
-        <div>
-            PW : <input type="password" name="password">
-        </div>
-        <div>
-            <input type="submit" value="送信">
-        </div>
-    <form>
+    <?php if ($variables["isLoginActive"]) { ?>
+        <a href="/login/unregister">ログアウト</a>
+    <?php } else { ?>
+        <h2>新規登録</h2>
+        <form method="post" action="/login/register">
+            @csrf
+            <div>
+                ID : <input type="text" name="id">
+            </div>
+            <div>
+                PW : <input type="password" name="password">
+            </div>
+            <div>
+                <input type="submit" value="送信">
+            </div>
+        <form>
+    <?php } ?>
 </body>
 </html>
