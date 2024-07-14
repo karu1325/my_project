@@ -10,12 +10,14 @@ class LoginController extends Controller
     public function index(Request $request)
     {
         // 非ログイン時はアカウント登録フォーム、ログイン時はログアウトボタンを表示するといった切り替えのため session に保存された login_id を取得
-        $loginId = $request->session()->get( "login_id" , null);
+        $loginId = $request->session()->get("login_id" , null);
         $variables = [
-            "isLoginActive" => isset( $loginId )
+            "isLoginActive" => isset($loginId)
         ];
-        return view("login/index", $variables);
+
+        return view("login/index", compact("variables"));
     }
+
     public function register(Request $request)
     {
         //formからの入力情報の取得
@@ -45,7 +47,7 @@ class LoginController extends Controller
         }
         
         //sessionにログインしているuser idを保存
-        $request->session()->put( "login_id", $records[0]->id );
+        $request->session()->put("login_id", $records[0]->id);
         return response("登録が完了しました。<a href='/login'>前のページへ戻る</a>");
     }
 
@@ -56,7 +58,7 @@ class LoginController extends Controller
 
         $records = DB::connection('mysql')->select("select * from users where id_str = '" . $id . "' and password = '" . $password . "'");
         if (count($records) == 0) {
-            return response("勝利中に問題が発生しました。 <a href='/login'>前のページに戻る</a>");
+            return response("処理中に問題が発生しました。 <a href='/login'>前のページに戻る</a>");
         }
 
         $request->session()->put("login_id", $records[0]->id);
