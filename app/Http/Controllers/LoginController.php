@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
+    //最初の登録画面
     public function index(Request $request)
     {
         // 非ログイン時はアカウント登録フォーム、ログイン時はログアウトボタンを表示するといった切り替えのため session に保存された login_id を取得
@@ -47,15 +48,25 @@ class LoginController extends Controller
         $request->session()->put( "login_id", $records[0]->id );
         return response("登録が完了しました。<a href='/login'>前のページへ戻る</a>");
     }
+
+    public function sign_in(Request $request)
+    {
+        $id = $request->input("id");
+        $password = $request->input("password");
+
+        $records = DB::connection('mysql')->select("select * from users where id_str = '" . $id . "' and password = '" . $password . "'");
+        if (count($records) == 0) {
+            return response("勝利中に問題が発生しました。 <a href='/login'>前のページに戻る</a>");
+        }
+
+        $request->session()->put("login_id", $records[0]->id);
+        return response("ログインが完了しました。 <a href='/login'>前のページに戻る</a>");
+    }
+
     public function unregister(Request $request)
     {
         //sessionに保存したidの値をnullに変更する
         $request->session()->flush();
         return response("ログアウトが完了しました。<a href='/login'>前のページへ戻る</a>");
-    }
-
-    public function sign_up(Request $request)
-    {
-        
     }
 }
