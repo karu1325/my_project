@@ -26,7 +26,7 @@ class LoginController extends Controller
 
         // 同一 id の登録が既に存在するかチェックするため、指定された id をもとに DB Record を取得する。
         // select count(*) は where 条件に合致するレコード数を取得する SQL Query。
-        $oldRecords = DB::connection('mysql')->select("select count(*) from users where id_str = '" . $id . "'");
+        $oldRecords = DB::connection('mysql')->select("select count(*) from users where id = '" . $id . "'");
         // sql query に失敗している場合、処理失敗として終了する
         if (count($oldRecords) == 0) {
             return response("処理中に問題が発生しました。<a href='/login'>前のページへ戻る</a>");
@@ -38,9 +38,9 @@ class LoginController extends Controller
         }
 
         //ここまで正常に処理が進んだら既存のレコードも存在しないため、入力情報をもとにレコードを追加する
-        DB::connection("mysql")->insert("insert into users (id_str,password) values ('" . $id . "','" . $password . "')");
+        DB::connection("mysql")->insert("insert into users (id,password) values ('" . $id . "','" . $password . "')");
         //ログインidを取得するため、保存したレコード情報を取得する
-        $records = DB::connection('mysql')->select("select * from users where id_str = '" . $id . "'");
+        $records = DB::connection('mysql')->select("select * from users where id = '" . $id . "'");
         //recordが取得できなかったら何等かのエラーが発生しているため処理を終了する
         if (count($records) == 0) {
             return response("ユーザーデータの登録処理中に問題が発生しました。 <a href='/login'>前のページに戻る</a>");
@@ -56,7 +56,7 @@ class LoginController extends Controller
         $id = $request->input("id");
         $password = $request->input("password");
 
-        $records = DB::connection('mysql')->select("select * from users where id_str = '" . $id . "' and password = '" . $password . "'");
+        $records = DB::connection('mysql')->select("select * from users where id = '" . $id . "' and password = '" . $password . "'");
         if (count($records) == 0) {
             return response("処理中に問題が発生しました。 <a href='/login'>前のページに戻る</a>");
         }
