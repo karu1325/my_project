@@ -25,7 +25,7 @@
             <div>
                 <input type="submit" value="送信">
             </div>
-        <form>
+        </form>
 
         <h2>ログイン</h2>
         <form method="post" action="/login/sign_in">
